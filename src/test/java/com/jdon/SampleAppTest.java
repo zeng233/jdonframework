@@ -79,7 +79,7 @@ public class SampleAppTest extends TestCase {
 	public void testDomainEvent() {
 
 		IServiceSample serviceSample = (IServiceSample) appUtil.getService("serviceSample");
-		Assert.assertEquals("hello", serviceSample.eventPointEntry("hello"));
+		Assert.assertEquals("hello-2", serviceSample.eventPointEntry("hello"));
 
 	}
 
@@ -89,15 +89,6 @@ public class SampleAppTest extends TestCase {
 		String res = (String) serviceSample.eventPointEntry();
 		System.out.print(res);
 		Assert.assertEquals(res, "Synchronous sayHello and Asynchronous eventMessage=100");
-
-	}
-
-	public void testDCIDomainEvent() {
-
-		IServiceSampleTwo serviceSample = (IServiceSampleTwo) appUtil.getService("serviceSampleTwo");
-		String res = (String) serviceSample.nameFinderContext();
-		System.out.print(res);
-		Assert.assertEquals(res, "Asynchronous eventMessage=100");
 
 	}
 
@@ -137,13 +128,26 @@ public class SampleAppTest extends TestCase {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		AppUtil appUtil = new AppUtil();
-		AI a = (AI) appUtil.getService("producer");
-		a.ma();
+		SampleAppTest sampleAppTest = new SampleAppTest();
+		try {
+			sampleAppTest.setUp();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		sampleAppTest.testCommand();
+
+		sampleAppTest.testCQRS();
+		sampleAppTest.testDomainEvent();
+		sampleAppTest.testDomainEventSimple();
+		sampleAppTest.testEvent();
+		sampleAppTest.testOnEvent();
+		sampleAppTest.testGetService();
+
 	}
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		appUtil.clear();
 	}
+
 }
